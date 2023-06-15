@@ -172,4 +172,46 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.672" />
 
+    <Button
+        android:id="@+id/buttonItemStop"
+        android:layout_width="82dp"
+        android:layout_height="49dp"
+        android:backgroundTint="#D6D6D6"
+        android:text="Stop"
+        android:textColor="#292929"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.386"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.772" />
+
+    <Button
+        android:id="@+id/buttonItemReset"
+        android:layout_width="82dp"
+        android:layout_height="49dp"
+        android:backgroundTint="#D6D6D6"
+        android:text="Reset"
+        android:textColor="#292929"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.645"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.772" />
+
+    <Button
+        android:id="@+id/buttonItemStart"
+        android:layout_width="82dp"
+        android:layout_height="49dp"
+        android:backgroundTint="#D6D6D6"
+        android:text="Start"
+        android:textColor="#292929"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.911"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.772" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
