@@ -118,9 +118,11 @@ public class ItemActivity extends AppCompatActivity {
             String reTextViewsItemCode;
             reTextViewsItemCode = itemList.get(position).getItemCode();
 
+            String itemTime = itemList.get(position).getItemTime();
+
             holder.reTextViewsItemCode.setText((CharSequence) itemList.get(position).getItemCode());
             holder.reTextViewsItemName.setText((CharSequence) itemList.get(position).getItemName());
-            holder.reTextViewItemTime.setText((CharSequence) itemList.get(position).getItemTime());
+            holder.reTextViewItemTime.setText(itemTime);
 
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override

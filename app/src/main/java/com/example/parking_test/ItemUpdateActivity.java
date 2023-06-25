@@ -23,7 +23,6 @@ import java.util.List;
 public class ItemUpdateActivity extends AppCompatActivity {
     private ItemDao itemDao;
     private List<Item> itemList;
-
     private TextView mTimeTextView;
     private Button buttonItemStop;
     private Button buttonItemStart;
@@ -41,7 +40,6 @@ public class ItemUpdateActivity extends AppCompatActivity {
                 .build();
         itemDao = itemDb.itemDao();
 
-
         Button buttonItemSave = findViewById(R.id.buttonItemSave);
         Button buttonItemOut = findViewById(R.id.buttonItemOut);
 
@@ -51,11 +49,11 @@ public class ItemUpdateActivity extends AppCompatActivity {
         EditText editTextItemTime = findViewById(R.id.editTextItemTime);
 
         //test code
-        mTimeTextView = findViewById(R.id.timer);
-        buttonItemStop = findViewById(R.id.buttonItemStop);
-        buttonItemStart = findViewById(R.id.buttonItemStart);
-        buttonItemReset = findViewById(R.id.buttonItemReset);
+        long now = System.currentTimeMillis();;
+        Date date = new Date(now);
+        SimpleDateFormat nowTime = new SimpleDateFormat("hh:mm");
 
+        String getTime = nowTime.format(date);
 
         Intent intent = getIntent();
         String sItemCode = intent.getExtras().getString("itemId");
@@ -70,8 +68,18 @@ public class ItemUpdateActivity extends AppCompatActivity {
             editTextsItemName.setText(itemList.get(0).getItemName());
             //update에 표기됨
             editTextNowDate.setText(itemList.get(0).getItemDate());
-            editTextItemTime.setText(itemList.get(0).getItemTime());
+            if (!itemList.isEmpty()) {
+                Item firstItem = itemList.get(0);
+                String itemTime = firstItem.getItemTime(); // getItemTime() 메서드로 시간 값을 가져옵니다.
+                editTextItemTime.setText(itemTime);
+            }
         }
+
+        //test code
+        mTimeTextView = findViewById(R.id.timer);
+        buttonItemStop = findViewById(R.id.buttonItemStop);
+        buttonItemStart = findViewById(R.id.buttonItemStart);
+        buttonItemReset = findViewById(R.id.buttonItemReset);
 
         buttonItemSave.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -98,7 +106,9 @@ public class ItemUpdateActivity extends AppCompatActivity {
                                     , editTextsItemName.getText().toString()
                                     //변경해야하는부분 date부분과 Time부분
                                     , editTextNowDate.getText().toString()
-                                    , editTextItemTime.getText().toString());
+                                    , getTime()
+                            );
+                            editTextItemTime.setText(getTime());
                             Toast.makeText(ItemUpdateActivity.this, "업데이트 되었습니다.", Toast.LENGTH_SHORT).show();
                         }
                     });
@@ -114,9 +124,9 @@ public class ItemUpdateActivity extends AppCompatActivity {
                             , editTextsItemName.getText().toString()
                             //변경해야하는부분
                             , editTextNowDate.getText().toString()
-                            , editTextItemTime.getText().toString()
+                            , getTime()
                     );
-
+                    editTextItemTime.setText(getTime());
                     itemDao.insert(item);
 
                     Toast.makeText(ItemUpdateActivity.this, "신규 저장되었습니다.", Toast.LENGTH_SHORT).show();
@@ -133,6 +143,7 @@ public class ItemUpdateActivity extends AppCompatActivity {
               //  }
             }
         });
+
         //test code
         buttonItemStop.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -157,13 +168,13 @@ public class ItemUpdateActivity extends AppCompatActivity {
     }
     //test code
     @SuppressLint("HandlerLeak")
-    Handler handler = new Handler() {
+    public Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
-            int sec = (msg.arg1 / 100) % 60;
-            int min = (msg.arg1 / 100) / 60;
-            int hour = (msg.arg1 / 100) / 360;
-            //1000이 1초 1000*60 은 1분 1000*60*10은 10분 1000*60*60은 한시간
+            int sec = (msg.arg1 / 50) % 60;
+            int min = (msg.arg1 / 50) / 60;
+            int hour = (msg.arg1 / 50) / 360;
+            //100이 1초 100*60 은 1분 100*60*10은 10분 100*60*60은 한시간
 
             @SuppressLint("DefaultLocale") String result = String.format("%02d:%02d:%02d", hour, min, sec);
             if (result.equals("00:01:15")) {
@@ -209,3 +220,23 @@ public class ItemUpdateActivity extends AppCompatActivity {
         return getTime;
     }
 }
+
+    /*@Override
+    protected void onStart(){
+        super.onStart();
+        buttonItemStart.setText("시작");
+        isRunning = true; // isRunning 변수 초기화
+        timeThread = new Thread(new timeThread());
+        timeThread.start();
+    }
+    @Override
+    protected void onPause(){
+        super.onPause();
+        buttonItemStop.setText("일시정지");
+        isRunning = false; // timeThread를 일시정지하기 위해 isRunning 변수를 false로 설정
+    }
+    @Override
+    protected void onResume(){
+        super.onResume();
+        isRunning = true; // timeThread를 다시 시작하기 위해 isRunning 변수를 true로 설정
+    }*/

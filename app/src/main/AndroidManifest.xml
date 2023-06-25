@@ -18,10 +18,7 @@
     <activity
         android:name=".ItemUpdateActivity"
         android:exported="true" />
-    <activity
-        android:name=".ItemUpdateAnotherActivity"
-        android:exported="true" />
-    <activity
+        <activity
         android:name=".ItemActivity"
         android:exported="true" />
     <activity

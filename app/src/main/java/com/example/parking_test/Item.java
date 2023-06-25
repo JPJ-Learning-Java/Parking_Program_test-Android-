@@ -19,12 +19,13 @@ public class Item {
     private String ItemTime;
 
 
-    public Item(String ItemCode, String ItemName, String ItemDate, String ItemTime) {
+    public Item( String ItemCode, String ItemName, String ItemDate, String ItemTime) {
         this.ItemCode = ItemCode;
         this.ItemName = ItemName;
         this.ItemDate = ItemDate;
         this.ItemTime = ItemTime;
     }
+
 
     public int getId() {
         return id;
