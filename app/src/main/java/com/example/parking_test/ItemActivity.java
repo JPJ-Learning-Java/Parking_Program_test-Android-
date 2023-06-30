@@ -39,7 +39,6 @@ public class ItemActivity extends AppCompatActivity {
     private ActivityItemBinding binding;
     private List<Item> itemList;
     private ItemDao itemDao;
-    private int i=0;
     private boolean getItem = true;
 
 
