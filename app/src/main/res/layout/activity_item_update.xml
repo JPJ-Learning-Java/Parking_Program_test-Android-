@@ -22,6 +22,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.24" />
 
+
     <Button
         android:id="@+id/buttonItemSave"
         android:layout_width="wrap_content"
@@ -31,11 +32,10 @@
         android:textColor="#292929"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.823"
+        app:layout_constraintHorizontal_bias="0.832"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.038" />
-
 
     <Button
         android:id="@+id/buttonItemComplete"
@@ -109,7 +109,7 @@
         android:id="@+id/textViewItemDate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="현재시각"
+        android:text="출입시간"
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -122,7 +122,7 @@
         android:id="@+id/textViewItemTime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="출입시간"
+        android:text="출차시간"
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -146,21 +146,6 @@
         app:layout_constraintVertical_bias="0.348" />
 
     <EditText
-        android:id="@+id/editTextNowDate"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:enabled="true"
-        android:inputType="datetime"
-        android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.777"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.463" />
-
-    <EditText
         android:id="@+id/editTextItemTime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -173,61 +158,37 @@
         app:layout_constraintHorizontal_bias="0.777"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.576" />
+        app:layout_constraintVertical_bias="0.467" />
 
-    <TextView
-        android:id="@+id/timer"
+    <EditText
+        android:id="@+id/editTextOutTime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="24sp"
+        android:ems="10"
+        android:enabled="false"
+        android:inputType="time"
+        android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.653"
+        app:layout_constraintHorizontal_bias="0.777"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.672" />
+        app:layout_constraintVertical_bias="0.579" />
 
-    <Button
-        android:id="@+id/buttonItemStop"
-        android:layout_width="82dp"
-        android:layout_height="49dp"
-        android:backgroundTint="#D6D6D6"
-        android:text="Stop"
-        android:textColor="#292929"
+    <EditText
+        android:id="@+id/testText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:enabled="false"
+        android:inputType="time"
+        android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.386"
+        app:layout_constraintHorizontal_bias="0.777"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.772" />
-
-    <Button
-        android:id="@+id/buttonItemReset"
-        android:layout_width="82dp"
-        android:layout_height="49dp"
-        android:backgroundTint="#D6D6D6"
-        android:text="Reset"
-        android:textColor="#292929"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.645"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.772" />
-
-    <Button
-        android:id="@+id/buttonItemStart"
-        android:layout_width="82dp"
-        android:layout_height="49dp"
-        android:backgroundTint="#D6D6D6"
-        android:text="Start"
-        android:textColor="#292929"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.911"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.772" />
+        app:layout_constraintVertical_bias="0.689" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

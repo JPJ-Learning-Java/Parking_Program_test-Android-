@@ -17,20 +17,23 @@ public class Item {
     private String ItemName;
     private String ItemDate;
     private String ItemTime;
+    private String ItemOutTime;
+    private String ItemAmount;
 
 
-    public Item( String ItemCode, String ItemName, String ItemDate, String ItemTime) {
+    public Item( String ItemCode, String ItemName, String ItemDate, String ItemTime, String ItemOutTime, String ItemAmount) {
         this.ItemCode = ItemCode;
         this.ItemName = ItemName;
         this.ItemDate = ItemDate;
         this.ItemTime = ItemTime;
+        this.ItemOutTime = ItemOutTime;
+        this.ItemAmount = ItemAmount;
     }
 
 
     public int getId() {
         return id;
     }
-
     public void setId(int id) {
         this.id = id;
     }
@@ -38,7 +41,6 @@ public class Item {
     public String getItemCode() {
         return ItemCode;
     }
-
     public void setItemCode(String sItemCode) {
         this.ItemCode = ItemCode;
     }
@@ -46,23 +48,13 @@ public class Item {
     public String getItemName() {
         return ItemName;
     }
-
     public void setItemName(String sItemName) {
         this.ItemName = ItemName;
     }
 
     public String getItemDate(){
-        /*long now;
-        Date date;
-        SimpleDateFormat nowDate = new SimpleDateFormat("yyyy-MM-dd-hh:mm:ss");
-
-        now = System.currentTimeMillis();
-        date = new Date(now);
-        ItemDate = nowDate.format(date);
-        return (ItemDate);*/
         return ItemDate;
     }
-
     public void setItemDate(String sDate){
         this.ItemDate = ItemDate;
     }
@@ -70,9 +62,22 @@ public class Item {
     public String getItemTime(){
         return ItemTime;
     }
-
     public void setItemTime(String sItemTime) {
         this.ItemTime = ItemTime;
+    }
+
+    public String getItemOutTime(){
+        return ItemOutTime;
+    }
+    public void setItemOutTime(String sItemOutTime) {
+        this.ItemOutTime = ItemOutTime;
+    }
+
+    public String getItemAmount(){
+        return ItemAmount;
+    }
+    public void setItemAmount(String sItemAmount) {
+        this.ItemAmount = ItemAmount;
     }
 
     @Override
@@ -83,6 +88,8 @@ public class Item {
                 ", ItemName='" + ItemName + '\'' +
                 ", ItemDate='" + ItemDate + '\'' +
                 ", ItemTime=" + ItemTime + '\'' +
+                ", ItemOutTime=" + ItemOutTime + '\'' +
+                ", ItemOutTime=" + ItemAmount + '\'' +
                 '}';
     }
 }

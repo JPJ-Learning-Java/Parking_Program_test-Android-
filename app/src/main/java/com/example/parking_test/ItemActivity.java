@@ -118,10 +118,12 @@ public class ItemActivity extends AppCompatActivity {
             reTextViewsItemCode = itemList.get(position).getItemCode();
 
             String itemTime = itemList.get(position).getItemTime();
+            String itemOutTime = itemList.get(position).getItemOutTime();
 
             holder.reTextViewsItemCode.setText((CharSequence) itemList.get(position).getItemCode());
             holder.reTextViewsItemName.setText((CharSequence) itemList.get(position).getItemName());
-            holder.reTextViewItemTime.setText(itemTime);
+            holder.reTextViewTime.setText(itemTime);
+            holder.reTextViewOutTime.setText(itemOutTime);
 
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -139,12 +141,14 @@ public class ItemActivity extends AppCompatActivity {
         public class ViewHolder extends RecyclerView.ViewHolder{
             private TextView reTextViewsItemCode;
             private TextView reTextViewsItemName;
-            private TextView reTextViewItemTime;
+            private TextView reTextViewTime;
+            private TextView reTextViewOutTime;
             public ViewHolder(View view){
                 super(view);
                 reTextViewsItemCode = view.findViewById(R.id.reTextViewsItemCode);
                 reTextViewsItemName = view.findViewById(R.id.reTextViewsItemName);
-                reTextViewItemTime = view.findViewById(R.id.reTextViewTime);
+                reTextViewTime = view.findViewById(R.id.reTextViewTime);
+                reTextViewOutTime = view.findViewById(R.id.reTextViewOutTime);
             }
         }
 
@@ -196,7 +200,9 @@ public class ItemActivity extends AppCompatActivity {
                     String ItemName = jsonObject.getString("ItemName");
                     String ItemDate = jsonObject.getString("ItemDate");
                     String ItemTime = jsonObject.getString("ItemTime");
-                    Item item = new Item(ItemCode, ItemName, ItemDate, ItemTime);
+                    String ItemOutTime = jsonObject.getString("ItemOutTime");
+                    String ItemAmount = jsonObject.getString("ItemAmount");
+                    Item item = new Item(ItemCode, ItemName, ItemDate, ItemTime, ItemOutTime, ItemAmount);
                     itemList.add(item);
                 }
 

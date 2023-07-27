@@ -4,31 +4,24 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.room.Room;
 
-import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 public class ItemUpdateActivity extends AppCompatActivity {
     private ItemDao itemDao;
     private List<Item> itemList;
-    /*private TextView mTimeTextView;
-    private Button buttonItemStop;
-    private Button buttonItemStart;
-    private Button buttonItemReset;
-    private Thread timeThread = null;
-    private boolean isRunning = true;*/
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,15 +39,10 @@ public class ItemUpdateActivity extends AppCompatActivity {
 
         EditText editTextsItemCode = findViewById(R.id.editTextsItemCode);
         EditText editTextsItemName = findViewById(R.id.editTextsItemName);
-        EditText editTextNowDate = findViewById(R.id.editTextNowDate);
         EditText editTextItemTime = findViewById(R.id.editTextItemTime);
+        EditText editTextOutTime = findViewById(R.id.editTextOutTime);
 
-        //test code
-        /*long now = System.currentTimeMillis();;
-        Date date = new Date(now);
-        SimpleDateFormat nowTime = new SimpleDateFormat("hh:mm");
-
-        String getTime = nowTime.format(date);*/
+        EditText test = findViewById(R.id.testText);
 
         Intent intent = getIntent();
         String sItemCode = intent.getExtras().getString("itemId");
@@ -68,7 +56,7 @@ public class ItemUpdateActivity extends AppCompatActivity {
             itemList = itemDao.selectCode(editTextsItemCode.getText().toString());
             editTextsItemName.setText(itemList.get(0).getItemName());
             //update에 표기됨
-            editTextNowDate.setText(itemList.get(0).getItemDate());
+            editTextOutTime.setText(itemList.get(0).getItemOutTime());
             //변경한 부분
             if (!itemList.isEmpty()) {
                 Item firstItem = itemList.get(0);
@@ -76,12 +64,6 @@ public class ItemUpdateActivity extends AppCompatActivity {
                 editTextItemTime.setText(itemTime);
             }
         }
-
-        //test code
-        /*mTimeTextView = findViewById(R.id.timer);
-        buttonItemStop = findViewById(R.id.buttonItemStop);
-        buttonItemStart = findViewById(R.id.buttonItemStart);
-        buttonItemReset = findViewById(R.id.buttonItemReset);*/
 
         buttonItemSave.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -107,8 +89,10 @@ public class ItemUpdateActivity extends AppCompatActivity {
                             itemDao.updateCode(editTextsItemCode.getText().toString()
                                     , editTextsItemName.getText().toString()
                                     //변경해야하는부분 date부분과 Time부분
-                                    , editTextNowDate.getText().toString()
+                                    , getDate()
                                     , getTime()
+                                    , editTextOutTime.getText().toString()
+                                    , getDate()
                             );
                             editTextItemTime.setText(getTime());
                             Toast.makeText(ItemUpdateActivity.this, "업데이트 되었습니다.", Toast.LENGTH_SHORT).show();
@@ -125,8 +109,10 @@ public class ItemUpdateActivity extends AppCompatActivity {
                     Item item = new Item(editTextsItemCode.getText().toString()
                             , editTextsItemName.getText().toString()
                             //변경해야하는부분
-                            , editTextNowDate.getText().toString()
+                            , getDate()
                             , getTime()
+                            , editTextOutTime.getText().toString()
+                            , getDate()
                     );
                     editTextItemTime.setText(getTime());
                     itemDao.insert(item);
@@ -137,10 +123,39 @@ public class ItemUpdateActivity extends AppCompatActivity {
         });
         //출차 버튼 코드
         buttonItemComplete.setOnClickListener(new View.OnClickListener() {
+            @Override
             public void onClick(View view){
-                /* * 변경해야하는부분
-                
-                * */
+                String itemCode = editTextsItemCode.getText().toString();
+                String itemTime = outTime();
+
+                //-----test code-----
+                String result;
+
+                try {
+                    String getTime = getTime();
+                    String outTime = outTime();
+                    result = calTime(getTime, outTime);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                    result = "Error";
+                }
+                test.setText(result);
+                //-----------------------------------
+
+                // 기존 데이터 조회
+                Item updateTime = itemDao.getItemByCode(itemCode);
+
+                // 데이터 수정
+                if (updateTime != null) {
+                    updateTime.setItemTime(itemTime);
+
+                    // 수정된 데이터 업데이트
+                    itemDao.updateTimeCode(itemCode, itemTime);
+                }
+                editTextOutTime.setText(itemTime);
+
+                Toast.makeText(ItemUpdateActivity.this, "출차 되었습니다.", Toast.LENGTH_SHORT).show();
+
             }
         });
 
@@ -153,100 +168,59 @@ public class ItemUpdateActivity extends AppCompatActivity {
               //  }
             }
         });
-
-        //test code
-       /* buttonItemStop.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View view){
-                timeThread.interrupt();
-            }
-        });
-        buttonItemReset.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View view){
-                    timeThread.interrupt();
-            }
-        });
-        buttonItemStart.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View view){
-                //test code
-                timeThread = new Thread(new timeThread());
-                timeThread.start();
-            }
-        });*/
     }
-    //test code
-    /*@SuppressLint("HandlerLeak")
-    public Handler handler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            int sec = (msg.arg1 / 100) % 60;
-            int min = (msg.arg1 / 100) / 60;
-            int hour = (msg.arg1 / 100) / 360;
-            //100이 1초 100*60 은 1분 100*60*10은 10분 100*60*60은 한시간
+    
+    //현재 날짜 함수
+    private String getDate(){
+        long now = System.currentTimeMillis();
+        Date date = new Date(now);
+        SimpleDateFormat nowDate = new SimpleDateFormat("yyyy-MM-dd");
 
-            @SuppressLint("DefaultLocale") String result = String.format("%02d:%02d:%02d", hour, min, sec);
-            if (result.equals("00:01:15")) {
-                Toast.makeText(ItemUpdateActivity.this, "1분 15초가 지났습니다.", Toast.LENGTH_SHORT).show();
-            }
-            mTimeTextView.setText(result);
-        }
-    };
-    public class timeThread implements Runnable {
-        @Override
-        public void run() {
-            int i = 0;
+        String getDate = nowDate.format(date);
 
-            while (true) {
-                while (isRunning) { //일시정지를 누르면 멈춤
-                    Message msg = new Message();
-                    msg.arg1 = i++;
-                    handler.sendMessage(msg);
-                    try {
-                        Thread.sleep(10);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                mTimeTextView.setText("");
-                                mTimeTextView.setText("00:00:00");
-                            }
-                        });
-                        return; // 인터럽트 받을 경우 return
-                    }
-                }
-            }
-        }
-    }*/
+        return getDate;
+    }
+
+    //출입시간 함수
     private String getTime(){
         long now = System.currentTimeMillis();;
-        Date date = new Date(now);
+        Date time = new Date(now);
         SimpleDateFormat nowTime = new SimpleDateFormat("hh:mm");
 
-        String getTime = nowTime.format(date);
+        String getTime = nowTime.format(time);
 
         return getTime;
     }
-}
 
-    /*@Override
-    protected void onStart(){
-        super.onStart();
-        buttonItemStart.setText("시작");
-        isRunning = true; // isRunning 변수 초기화
-        timeThread = new Thread(new timeThread());
-        timeThread.start();
+    //출차시간 함수
+    private String outTime(){
+        long now = System.currentTimeMillis();;
+        Date time = new Date(now);
+        SimpleDateFormat nowTime = new SimpleDateFormat("hh:mm");
+
+        String outTime = nowTime.format(time);
+
+        return outTime;
     }
-    @Override
-    protected void onPause(){
-        super.onPause();
-        buttonItemStop.setText("일시정지");
-        isRunning = false; // timeThread를 일시정지하기 위해 isRunning 변수를 false로 설정
+
+    public String calTime(String getTime, String outTime) throws ParseException {
+
+        // 두 개의 문자열을 Date 형식으로 변환
+        SimpleDateFormat f = new SimpleDateFormat("hh:mm", Locale.KOREA);
+        Date d1 = f.parse(getTime);
+        Date d2 = f.parse(outTime);
+
+        // 두 날짜 사이의 차이 계산
+        long diff = d2.getTime() - d1.getTime();
+        long lastDiff = diff / 10;
+        Log.d("Diff", String.valueOf(lastDiff));
+
+        // 결과를 시간 형태인 hh:mm으로 변환하여 반환
+        int hour = (int) (lastDiff / 3600);
+        int minute = (int) ((lastDiff % 3600) / 60);
+        String formattedTime = String.format("%02d:%02d", hour, minute);
+
+        // 결과를 다시 String 형태로 변환하여 반환
+        return formattedTime;
     }
-    @Override
-    protected void onResume(){
-        super.onResume();
-        isRunning = true; // timeThread를 다시 시작하기 위해 isRunning 변수를 true로 설정
-    }*/
+}

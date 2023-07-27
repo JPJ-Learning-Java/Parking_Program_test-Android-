@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "4d99071e61f8dbabdbf8e6497393e6a9",
+    "identityHash": "94e24f8de8a4556326e525971960416b",
     "entities": [
       {
         "tableName": "Item",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `ItemCode` TEXT, `ItemName` TEXT, `ItemDate` TEXT, `ItemTime` TEXT)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `ItemCode` TEXT, `ItemName` TEXT, `ItemDate` TEXT, `ItemTime` TEXT, `ItemOutTime` TEXT, `ItemAmount` TEXT)",
         "fields": [
           {
             "fieldPath": "id",
@@ -37,6 +37,18 @@
             "columnName": "ItemTime",
             "affinity": "TEXT",
             "notNull": false
+          },
+          {
+            "fieldPath": "ItemOutTime",
+            "columnName": "ItemOutTime",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "ItemAmount",
+            "columnName": "ItemAmount",
+            "affinity": "TEXT",
+            "notNull": false
           }
         ],
         "primaryKey": {
@@ -52,7 +64,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '4d99071e61f8dbabdbf8e6497393e6a9')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '94e24f8de8a4556326e525971960416b')"
     ]
   }
 }

@@ -34,8 +34,14 @@ public interface ItemDao {
     @Query("SELECT ItemCode FROM Item order by ItemCode desc LIMIT 1")
     String newCode();
 
-    @Query("UPDATE Item SET ItemName = :ItemName, ItemDate = :ItemDate, ItemTime = :ItemTime WHERE ItemCode = :countCode")
-    void updateCode( String countCode, String ItemName, String ItemDate, String ItemTime);
+    //temp
+    @Query("SELECT * FROM item WHERE itemCode = :itemCode")
+    Item getItemByCode(String itemCode);
+
+    @Query("UPDATE Item SET ItemName = :ItemName, ItemDate = :ItemDate, ItemTime = :ItemTime, ItemOutTime = :ItemOutTime, ItemAmount = :ItemAmount WHERE ItemCode = :countCode")
+    void updateCode( String countCode, String ItemName, String ItemDate, String ItemTime, String ItemOutTime, String ItemAmount);
+    @Query("UPDATE Item SET ItemOutTime = :ItemOutTime WHERE ItemCode = :countCode")
+    void updateTimeCode( String countCode, String ItemOutTime);
 
     @Query("SELECT COUNT(ItemCode) FROM Item")
     int countCode();
