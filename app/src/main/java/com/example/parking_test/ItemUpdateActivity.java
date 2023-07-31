@@ -126,20 +126,11 @@ public class ItemUpdateActivity extends AppCompatActivity {
             @Override
             public void onClick(View view){
                 String itemCode = editTextsItemCode.getText().toString();
-                String itemTime = outTime();
+                String itemOutTime = outTime();
+                String getTime = itemList.get(0).getItemTime();
 
                 //-----test code-----
                 String result;
-
-                try {
-                    String getTime = getTime();
-                    String outTime = outTime();
-                    result = calTime(getTime, outTime);
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                    result = "Error";
-                }
-                test.setText(result);
                 //-----------------------------------
 
                 // 기존 데이터 조회
@@ -147,12 +138,20 @@ public class ItemUpdateActivity extends AppCompatActivity {
 
                 // 데이터 수정
                 if (updateTime != null) {
-                    updateTime.setItemTime(itemTime);
+                    updateTime.setItemTime(itemOutTime);
 
                     // 수정된 데이터 업데이트
-                    itemDao.updateTimeCode(itemCode, itemTime);
+                    itemDao.updateTimeCode(itemCode, itemOutTime);
                 }
-                editTextOutTime.setText(itemTime);
+                try {
+                    result = calTime(getTime, itemOutTime);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                    result = "Error";
+                }
+                test.setText(result);
+
+                editTextOutTime.setText(itemOutTime);
 
                 Toast.makeText(ItemUpdateActivity.this, "출차 되었습니다.", Toast.LENGTH_SHORT).show();
 
@@ -209,15 +208,16 @@ public class ItemUpdateActivity extends AppCompatActivity {
         SimpleDateFormat f = new SimpleDateFormat("hh:mm", Locale.KOREA);
         Date d1 = f.parse(getTime);
         Date d2 = f.parse(outTime);
+        Log.d("Time", String.valueOf(d1.getTime()));
+        Log.d("Time", String.valueOf(d2.getTime()));
 
         // 두 날짜 사이의 차이 계산
         long diff = d2.getTime() - d1.getTime();
-        long lastDiff = diff / 10;
-        Log.d("Diff", String.valueOf(lastDiff));
+        long lastDiff = diff/10;
 
         // 결과를 시간 형태인 hh:mm으로 변환하여 반환
-        int hour = (int) (lastDiff / 3600);
-        int minute = (int) ((lastDiff % 3600) / 60);
+        int hour = (int) (lastDiff / (60 * 60 * 100));
+        int minute = (int) ((lastDiff / 60 - (hour * 60 * 100))/100);
         String formattedTime = String.format("%02d:%02d", hour, minute);
 
         // 결과를 다시 String 형태로 변환하여 반환
