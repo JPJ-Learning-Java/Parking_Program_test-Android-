@@ -7,7 +7,6 @@ import androidx.room.Room;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -42,7 +41,7 @@ public class ItemUpdateActivity extends AppCompatActivity {
         EditText editTextItemTime = findViewById(R.id.editTextItemTime);
         EditText editTextOutTime = findViewById(R.id.editTextOutTime);
 
-        EditText test = findViewById(R.id.testText);
+        EditText editTextAmount = findViewById(R.id.editTextAmount);
 
         Intent intent = getIntent();
         String sItemCode = intent.getExtras().getString("itemId");
@@ -62,6 +61,11 @@ public class ItemUpdateActivity extends AppCompatActivity {
                 Item firstItem = itemList.get(0);
                 String itemTime = firstItem.getItemTime(); // getItemTime() 메서드로 시간 값을 가져옵니다.
                 editTextItemTime.setText(itemTime);
+            }
+            if (!itemList.isEmpty()) {
+                Item firstItem = itemList.get(0);
+                String itemAmount = firstItem.getItemAmount(); // getItemAmount() 메서드로 시간 값을 가져옵니다.
+                editTextAmount.setText(itemAmount);
             }
         }
 
@@ -92,7 +96,7 @@ public class ItemUpdateActivity extends AppCompatActivity {
                                     , getDate()
                                     , getTime()
                                     , editTextOutTime.getText().toString()
-                                    , getDate()
+                                    , editTextAmount.getText().toString()
                             );
                             editTextItemTime.setText(getTime());
                             Toast.makeText(ItemUpdateActivity.this, "업데이트 되었습니다.", Toast.LENGTH_SHORT).show();
@@ -112,7 +116,7 @@ public class ItemUpdateActivity extends AppCompatActivity {
                             , getDate()
                             , getTime()
                             , editTextOutTime.getText().toString()
-                            , getDate()
+                            , editTextAmount.getText().toString()
                     );
                     editTextItemTime.setText(getTime());
                     itemDao.insert(item);
@@ -126,12 +130,17 @@ public class ItemUpdateActivity extends AppCompatActivity {
             @Override
             public void onClick(View view){
                 String itemCode = editTextsItemCode.getText().toString();
+                String itemGetTime = itemList.get(0).getItemTime();
                 String itemOutTime = outTime();
-                String getTime = itemList.get(0).getItemTime();
 
-                //-----test code-----
-                String result;
-                //-----------------------------------
+                String itemAmount;
+
+                try {
+                    itemAmount = amount(itemGetTime, itemOutTime);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                    itemAmount = "Error";
+                }
 
                 // 기존 데이터 조회
                 Item updateTime = itemDao.getItemByCode(itemCode);
@@ -142,14 +151,10 @@ public class ItemUpdateActivity extends AppCompatActivity {
 
                     // 수정된 데이터 업데이트
                     itemDao.updateTimeCode(itemCode, itemOutTime);
+                    itemDao.updateAmountCode(itemCode, itemAmount);
                 }
-                try {
-                    result = calTime(getTime, itemOutTime);
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                    result = "Error";
-                }
-                test.setText(result);
+
+                editTextAmount.setText(itemAmount);
 
                 editTextOutTime.setText(itemOutTime);
 
@@ -164,7 +169,6 @@ public class ItemUpdateActivity extends AppCompatActivity {
                     itemDao.deleteCode(editTextsItemCode.getText().toString());
 
                     Toast.makeText(ItemUpdateActivity.this, "삭제되었습니다.", Toast.LENGTH_SHORT).show();
-              //  }
             }
         });
     }
@@ -202,25 +206,40 @@ public class ItemUpdateActivity extends AppCompatActivity {
         return outTime;
     }
 
-    public String calTime(String getTime, String outTime) throws ParseException {
+    public String amount(String getTime, String outTime) throws ParseException {
 
         // 두 개의 문자열을 Date 형식으로 변환
         SimpleDateFormat f = new SimpleDateFormat("hh:mm", Locale.KOREA);
         Date d1 = f.parse(getTime);
         Date d2 = f.parse(outTime);
-        Log.d("Time", String.valueOf(d1.getTime()));
-        Log.d("Time", String.valueOf(d2.getTime()));
 
         // 두 날짜 사이의 차이 계산
         long diff = d2.getTime() - d1.getTime();
         long lastDiff = diff/10;
 
+        //Log.d("Time", String.valueOf(lastDiff));
+
+        // 결과물인 시간을 받아서 금액으로 변환
+        int hourlyRate = 1000; //시간당 요금
+        int parkingTime = (int) (lastDiff / (60 * 100));
+        int roundedTime = (parkingTime / 30) * 30;
+        //Log.d("parkTime", String.valueOf(parkingTime));
+        //Log.d("roundTime", String.valueOf(roundedTime));
+        int totalPay = 1000;
+        for( int i = 0; i < roundedTime; i += 30)
+        {
+            totalPay += hourlyRate;
+        }
+        String formattedPay = String.format("%d", totalPay);
+
+        /*
         // 결과를 시간 형태인 hh:mm으로 변환하여 반환
         int hour = (int) (lastDiff / (60 * 60 * 100));
         int minute = (int) ((lastDiff / 60 - (hour * 60 * 100))/100);
         String formattedTime = String.format("%02d:%02d", hour, minute);
+         */
 
         // 결과를 다시 String 형태로 변환하여 반환
-        return formattedTime;
+        return formattedPay;
     }
 }

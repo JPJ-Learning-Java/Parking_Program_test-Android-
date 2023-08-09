@@ -119,11 +119,13 @@ public class ItemActivity extends AppCompatActivity {
 
             String itemTime = itemList.get(position).getItemTime();
             String itemOutTime = itemList.get(position).getItemOutTime();
+            String itemAmount = itemList.get(position).getItemAmount();
 
             holder.reTextViewsItemCode.setText((CharSequence) itemList.get(position).getItemCode());
             holder.reTextViewsItemName.setText((CharSequence) itemList.get(position).getItemName());
             holder.reTextViewTime.setText(itemTime);
             holder.reTextViewOutTime.setText(itemOutTime);
+            holder.reTextViewAmount.setText(itemAmount);
 
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -143,12 +145,14 @@ public class ItemActivity extends AppCompatActivity {
             private TextView reTextViewsItemName;
             private TextView reTextViewTime;
             private TextView reTextViewOutTime;
+            private TextView reTextViewAmount;
             public ViewHolder(View view){
                 super(view);
                 reTextViewsItemCode = view.findViewById(R.id.reTextViewsItemCode);
                 reTextViewsItemName = view.findViewById(R.id.reTextViewsItemName);
                 reTextViewTime = view.findViewById(R.id.reTextViewTime);
                 reTextViewOutTime = view.findViewById(R.id.reTextViewOutTime);
+                reTextViewAmount = view.findViewById(R.id.reTextViewAmount);
             }
         }
 

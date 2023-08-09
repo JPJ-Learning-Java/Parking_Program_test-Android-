@@ -40,8 +40,12 @@ public interface ItemDao {
 
     @Query("UPDATE Item SET ItemName = :ItemName, ItemDate = :ItemDate, ItemTime = :ItemTime, ItemOutTime = :ItemOutTime, ItemAmount = :ItemAmount WHERE ItemCode = :countCode")
     void updateCode( String countCode, String ItemName, String ItemDate, String ItemTime, String ItemOutTime, String ItemAmount);
+
     @Query("UPDATE Item SET ItemOutTime = :ItemOutTime WHERE ItemCode = :countCode")
     void updateTimeCode( String countCode, String ItemOutTime);
+
+    @Query("UPDATE Item SET ItemAmount = :ItemAmount WHERE ItemCode = :countCode")
+    void updateAmountCode( String countCode, String ItemAmount);
 
     @Query("SELECT COUNT(ItemCode) FROM Item")
     int countCode();
